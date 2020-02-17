@@ -17,3 +17,8 @@ BOOL APIENTRY DllMain( HMODULE hModule,
     return TRUE;
 }
 
+extern "C" {
+    __declspec(dllexport) int GiveMe42FromC() {
+        return 42;
+    }
+}
