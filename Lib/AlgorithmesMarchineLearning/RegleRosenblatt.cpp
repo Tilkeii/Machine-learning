@@ -17,4 +17,8 @@ extern "C" {
     __declspec(dllexport) int PredictModel() {
         return 0;
     }
+
+    __declspec(dllexport) int FreeLinearModel() {
+        return 0;
+    }
 }
