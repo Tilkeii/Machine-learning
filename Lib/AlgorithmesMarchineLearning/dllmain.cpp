@@ -1,5 +1,6 @@
 // dllmain.cpp : Définit le point d'entrée de l'application DLL.
 #include "pch.h"
+#include "RegleRosenblatt.h"
 
 BOOL APIENTRY DllMain( HMODULE hModule,
                        DWORD  ul_reason_for_call,
@@ -15,10 +16,4 @@ BOOL APIENTRY DllMain( HMODULE hModule,
         break;
     }
     return TRUE;
-}
-
-extern "C" {
-    __declspec(dllexport) int GiveMe42FromC() {
-        return 42;
-    }
 }
