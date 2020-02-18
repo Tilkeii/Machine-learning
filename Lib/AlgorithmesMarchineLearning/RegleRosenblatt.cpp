@@ -11,15 +11,15 @@ template <typename T> int sgn(T val) {
     Premiere ligne de la matrix à 1
     [1, 6, 2, 4, 1, 3] 
     =>
-    1 1 1 
-    1 2 1 
-    6 4 3
+    1 1 6 
+    1 2 4 
+    1 1 3
 */
 MatrixXd ArrayToMatrix(double* arr, int len) {
 
-    MatrixXd mat = MatrixXd(len, 3);
+    MatrixXd mat = MatrixXd(len / 2, 3);
 
-    for (size_t i = 0; i < len / 2; i+=2)
+    for (size_t i = 0; i < len - 1; i+=2)
     {
         mat << Vector3d(1, arr[i], arr[i + 1]);
     }
@@ -28,13 +28,13 @@ MatrixXd ArrayToMatrix(double* arr, int len) {
 }
 
 double* MatrixToArray(MatrixXd mat) {
-    
-    double* arr = new double[mat.size * mat.size];
+
+    double* arr = new double[mat.size * mat.row(0).size];
     int cmpt = 0;
 
     for (size_t i = 0; i < mat.size; i++)
     {
-        for (size_t t = 0; t < mat.size; t++)
+        for (size_t t = 0; t < mat.row(i).size; t++)
         {
             arr[cmpt] = mat(i, t);
             cmpt++;
@@ -66,19 +66,35 @@ extern "C" {
         return weight;
     }
 
-    __declspec(dllexport) int TrainRegressionModel(
-        double* model, double trainingInputs[],
-        int count_feature, int trainingSphereLength,
-        double trainingExpectedOutputs[],
-        int biais,
-        float pas_apprentissage,
-        int count_iteration
-    ) {
-        // Eigen::Transpose
-        // Eigen::Inverse
-        // Eigen::MatrixXd 
+    __declspec(dllexport) double* TrainRegressionModel(
+        double* model, 
+        double* trainingInputs,
+        int count_feature, 
+        int trainingSphereLength,
+        double* trainingExpectedOutputs
+    ) { 
+        MatrixXd mat = ArrayToMatrix(trainingInputs, trainingSphereLength * 2);
+        MatrixXd matT = mat.transpose();
+        VectorXd Y(trainingSphereLength);
 
-        return 0;
+        for (size_t i = 0; i < trainingSphereLength; i++)
+        {
+            Y << trainingExpectedOutputs[i];
+        }
+
+        auto W = ((matT * mat).inverse() * matT)* Y;
+        int cmpt = 0;
+
+        for (size_t i = 0; i < mat.size; i++)
+        {
+            for (size_t t = 0; t < mat.row(i).size; t++)
+            {
+                model[cmpt] = W(i, t);
+                cmpt++;
+            }
+        }
+
+        return model;
     }
 
     __declspec(dllexport) int TrainClassificationModel(
