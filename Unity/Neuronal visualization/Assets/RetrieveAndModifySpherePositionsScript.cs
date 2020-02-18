@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.InteropServices;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -13,7 +14,29 @@ public class RetrieveAndModifySpherePositionsScript : MonoBehaviour
 
     private double[] trainingExpectedOutputs;
 
-    private IntPtr model;
+    private IntPtr modelPtr;
+
+    [DllImport("AlgorithmesMarchineLearning")]
+    private static extern IntPtr CreateLinearModel(int count_feature);
+
+    [DllImport("AlgorithmesMarchineLearning")]
+    private static extern IntPtr PredictClassificationModel(
+        IntPtr model,
+        double[] input,
+        int len_input,
+        int count_feature);
+
+    [DllImport("AlgorithmesMarchineLearning")]
+    private static extern double PredictRegressionModel(
+        IntPtr model,
+        double[] input);
+
+    [DllImport("AlgorithmesMarchineLearning")]
+    private static extern IntPtr TrainRegressionModel(
+        IntPtr model,
+        double[] trainingInputs,
+        int trainingSphereLength,
+        double[] trainingExpectedOutputs);
 
     public void ReInitialize()
     {
@@ -29,11 +52,26 @@ public class RetrieveAndModifySpherePositionsScript : MonoBehaviour
     public void CreateModel()
     {
         //model = CreateLinearModel(2, 1);
+        Debug.Log($"/****************************/");
+        Debug.Log($"CREATE LINEAR MODEL");
+
+        double[] model = new double[3];
+
+        modelPtr = CreateLinearModel(2);
+
+        Marshal.Copy(modelPtr, model, 0, model.Length);
+
+        foreach (var item in model)
+        {
+            Debug.Log($"Test : {item}");
+        }
+
+        Debug.Log($"/****************************/");
     }
 
     public void Train()
     {
-        trainingInputs = new double[trainingSpheres.Length * 2];
+/*        trainingInputs = new double[trainingSpheres.Length * 2];
         trainingExpectedOutputs = new double[trainingSpheres.Length];
 
         for (var i = 0; i < trainingSpheres.Length; i++)
@@ -41,9 +79,17 @@ public class RetrieveAndModifySpherePositionsScript : MonoBehaviour
             trainingInputs[2 * i] = trainingSpheres[i].position.x;
             trainingInputs[2 * i + 1] = trainingSpheres[i].position.z;
             trainingExpectedOutputs[i] = trainingSpheres[i].position.y;
-        }
+        }*/
         
         // TrainLinearModelRosenblatt(model, trainingInputs, 2, trainingSpheres.Length, trainingExpectedOutputs, 1, 0.01, 1000)
+    }
+
+    public void TrainRegressionModel()
+    {
+        Debug.Log($"/****************************/");
+        Debug.Log($"TRAIN REGRESSION MODEL");
+
+        // IntPtr trainRegressionModelPtr = TrainRegressionModel(modelPtr, );
     }
 
     public void PredictOnTestSpheres()
@@ -51,11 +97,14 @@ public class RetrieveAndModifySpherePositionsScript : MonoBehaviour
         for (var i = 0; i < testSpheres.Length; i++)
         {
             var input = new double[] {testSpheres[i].position.x, testSpheres[i].position.z};
+
             //var predictedY = PredictXXXLinearModel(model, input, 2)
-            var predictedY = Random.Range(-5, 5);
+            double predictedY = PredictRegressionModel(modelPtr, input);
+
+            //var predictedY = Random.Range(-5, 5);
             testSpheres[i].position = new Vector3(
                 testSpheres[i].position.x,
-                predictedY,
+                (float) predictedY,
                 testSpheres[i].position.z);
         }
     }
