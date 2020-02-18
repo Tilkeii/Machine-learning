@@ -15,7 +15,7 @@ public class TestImportDll : MonoBehaviour
     private static extern IntPtr CreateLinearModel(int count_feature);
 
     [DllImport("AlgorithmesMarchineLearning")]
-    private static extern IntPtr PredictLinearModel(
+    private static extern IntPtr PredictClassificationModel(
         IntPtr model,
         double[] input,
         int len_input,

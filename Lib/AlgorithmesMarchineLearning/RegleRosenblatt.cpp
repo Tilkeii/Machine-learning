@@ -28,7 +28,19 @@ extern "C" {
         return weight;
     }
 
-    __declspec(dllexport) int TrainLinearModel(
+    __declspec(dllexport) int TrainRegressionModel(
+        double* model, double trainingInputs[],
+        int count_feature, int trainingSphereLength,
+        double trainingExpectedOutputs[],
+        int biais,
+        float pas_apprentissage,
+        int count_iteration
+    ) {
+        
+        return 0;
+    }
+
+    __declspec(dllexport) int TrainClassificationModel(
         double *model, double trainingInputs[],
         int count_feature, int trainingSphereLength,
         double trainingExpectedOutputs[],
@@ -55,7 +67,7 @@ extern "C" {
         return resultat;
     }
 
-    __declspec(dllexport) double* PredictLinearModel(
+    __declspec(dllexport) double* PredictClassificationModel(
         double *model, 
         double *input,
         int len_input,
