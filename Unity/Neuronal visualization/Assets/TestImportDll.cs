@@ -19,7 +19,9 @@ public class TestImportDll : MonoBehaviour
 
         double[] model = new double[3];
 
-        Marshal.Copy(model, 0, CreateLinearModel(2), model.Length);
+        IntPtr modelPtr = CreateLinearModel(2);
+
+        Marshal.Copy(modelPtr, model, 0, model.Length);
 
         foreach (var item in model)
         {
