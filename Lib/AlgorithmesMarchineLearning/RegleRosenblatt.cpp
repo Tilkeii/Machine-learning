@@ -19,11 +19,10 @@ extern "C" {
     __declspec(dllexport) double* CreateLinearModel(int count_feature) {
         double* weight = new double[count_feature + 1];
 
-        static int table[] = { -1, 1 };
 
         for (size_t i = 0; i < count_feature + 1; i++)
         {
-            weight[i] = table[rand() % 2];
+            weight[i] = (2 * ((double)rand() / (double)RAND_MAX) -1);
         }
 
         return weight;

@@ -52,10 +52,10 @@ public class TestImportDll : MonoBehaviour
         double[] predictRegression = new double[3];
 
         double[] input = new double[spheres.Length * 2];
-        for (int i = 0; i < spheres.Length * 2; i+=2)
+        for (int i = 0; i < input.Length - 1; i+=2)
         {
-            input[i] = spheres[i].position.x;
-            input[i + 1] = spheres[i].position.z;
+            input[i] = spheres[i/2].position.x;
+            input[i + 1] = spheres[i/2].position.z;
         }
 
         IntPtr predictRegressionPtr = PredictRegressionModel(modelPtr, input, input.Length, 2);
