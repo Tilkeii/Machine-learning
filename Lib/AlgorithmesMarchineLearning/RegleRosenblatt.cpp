@@ -37,14 +37,14 @@ extern "C" {
     /**
         count_input : total input
     */
-    __declspec(dllexport) double* PredictRegressionModel(double* model, double* input, int count_input, int count_feature, int biais) {
+    __declspec(dllexport) double* PredictRegressionModel(double* model, double* input, int len_input, int count_feature) {
 
-        double *resultat = new double[count_input];
+        double *resultat = new double[len_input / 2];
         int cmpt = 0;
 
-        for (size_t i = 0; i < count_input - 1; i+=2)
+        for (size_t i = 0; i < len_input - 1; i+=2)
         {
-            resultat[cmpt] = biais + model[1] * input[i] + model[2] * input[i + 1];
+            resultat[cmpt] = model[0] + model[1] * input[i] + model[2] * input[i + 1];
             cmpt++;
         }
         return resultat;
@@ -53,16 +53,15 @@ extern "C" {
     __declspec(dllexport) double* PredictLinearModel(
         double *model, 
         double *input,
-        int count_input,
-        int count_feature,
-        int biais
+        int len_input,
+        int count_feature
     ) {
-        double* resultat = new double[count_input];
+        double* resultat = new double[len_input];
         
-        double* regression = PredictRegressionModel(model, input, count_input, count_feature, biais);
-        for (size_t i = 0; i < count_input; i++)
+        double* regression = PredictRegressionModel(model, input, len_input, count_feature);
+        for (size_t i = 0; i < len_input / 2; i++)
         {
-            resultat[i] = signbit(regression[i]);
+            resultat[i] = sgn(regression[i]);
         }
 
         return resultat;
@@ -70,5 +69,9 @@ extern "C" {
 
     __declspec(dllexport) int FreeLinearModel(double *model) {
         return 0;
+    }
+
+    template <typename T> int sgn(T val) {
+        return (T(0) < val) - (val < T(0));
     }
 }
