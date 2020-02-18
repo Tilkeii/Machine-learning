@@ -29,12 +29,12 @@ MatrixXd ArrayToMatrix(double* arr, int len) {
 
 double* MatrixToArray(MatrixXd mat) {
 
-    double* arr = new double[mat.size * mat.row(0).size];
+    double* arr = new double[mat.size() * mat.row(0).size()];
     int cmpt = 0;
 
-    for (size_t i = 0; i < mat.size; i++)
+    for (size_t i = 0; i < mat.size(); i++)
     {
-        for (size_t t = 0; t < mat.row(i).size; t++)
+        for (size_t t = 0; t < mat.row(i).size(); t++)
         {
             arr[cmpt] = mat(i, t);
             cmpt++;
@@ -85,9 +85,9 @@ extern "C" {
         auto W = ((matT * mat).inverse() * matT)* Y;
         int cmpt = 0;
 
-        for (size_t i = 0; i < mat.size; i++)
+        for (size_t i = 0; i < mat.size(); i++)
         {
-            for (size_t t = 0; t < mat.row(i).size; t++)
+            for (size_t t = 0; t < mat.row(i).size(); t++)
             {
                 model[cmpt] = W(i, t);
                 cmpt++;
