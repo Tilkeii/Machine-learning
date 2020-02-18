@@ -1,9 +1,47 @@
 #include "pch.h"
 #include "RegleRosenblatt.h"
 
+using namespace Eigen;
 
 template <typename T> int sgn(T val) {
     return (T(0) < val) - (val < T(0));
+}
+
+/**
+    Premiere ligne de la matrix à 1
+    [1, 6, 2, 4, 1, 3] 
+    =>
+    1 1 1 
+    1 2 1 
+    6 4 3
+*/
+MatrixXd ArrayToMatrix(double* arr, int len) {
+
+    MatrixXd mat = MatrixXd(len, 3);
+
+    for (size_t i = 0; i < len / 2; i+=2)
+    {
+        mat << Vector3d(1, arr[i], arr[i + 1]);
+    }
+
+    return mat;
+}
+
+double* MatrixToArray(MatrixXd mat) {
+    
+    double* arr = new double[mat.size * mat.size];
+    int cmpt = 0;
+
+    for (size_t i = 0; i < mat.size; i++)
+    {
+        for (size_t t = 0; t < mat.size; t++)
+        {
+            arr[cmpt] = mat(i, t);
+            cmpt++;
+        }
+    }
+
+    return arr;
 }
 
 extern "C" {
@@ -36,7 +74,10 @@ extern "C" {
         float pas_apprentissage,
         int count_iteration
     ) {
-        
+        // Eigen::Transpose
+        // Eigen::Inverse
+        // Eigen::MatrixXd 
+
         return 0;
     }
 
