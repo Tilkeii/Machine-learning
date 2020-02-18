@@ -75,8 +75,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>D:\Dev\eigen-3.3.7\Eigen;$(IncludePath)</IncludePath>
-    <LibraryPath>D:\Dev\eigen-3.3.7\Eigen;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\Users\flori\Documents\eigen-3.3.7\Eigen;D:\Dev\eigen-3.3.7\Eigen;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Users\flori\Documents\eigen-3.3.7\Eigen;D:\Dev\eigen-3.3.7\Eigen;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
