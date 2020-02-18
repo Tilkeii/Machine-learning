@@ -2,7 +2,13 @@
 #include "RegleRosenblatt.h"
 
 
+template <typename T> int sgn(T val) {
+    return (T(0) < val) - (val < T(0));
+}
+
 extern "C" {
+
+
     __declspec(dllexport) int GiveMe42FromC() {
         return 42;
     }
@@ -69,9 +75,5 @@ extern "C" {
 
     __declspec(dllexport) int FreeLinearModel(double *model) {
         return 0;
-    }
-
-    template <typename T> int sgn(T val) {
-        return (T(0) < val) - (val < T(0));
     }
 }
