@@ -72,8 +72,8 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>C:\Users\flori\Documents\eigen-3.3.7\Eigen;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Users\flori\Documents\eigen-3.3.7\Eigen;$(LibraryPath)</LibraryPath>
+    <IncludePath>D:\Dev\eigen-3.3.7\Eigen;C:\Users\flori\Documents\eigen-3.3.7\Eigen;$(IncludePath)</IncludePath>
+    <LibraryPath>D:\Dev\eigen-3.3.7\Eigen;C:\Users\flori\Documents\eigen-3.3.7\Eigen;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>

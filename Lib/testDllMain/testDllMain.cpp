@@ -2,7 +2,7 @@
 //
 
 #include <iostream>
-#include "../AlgorithmesMarchineLearning/RegleRosenblatt.h"
+#include "../AlgorithmesMarchineLearning/LinearModel.h"
 
 int main()
 {
