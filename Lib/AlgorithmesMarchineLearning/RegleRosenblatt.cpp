@@ -1,5 +1,8 @@
 #include "pch.h"
 #include "RegleRosenblatt.h"
+#include <stdio.h>
+#include <iostream>
+
 
 using namespace Eigen;
 
@@ -15,13 +18,16 @@ template <typename T> int sgn(T val) {
     1 2 4 
     1 1 3
 */
-MatrixXd ArrayToMatrix(double* arr, int len) {
+MatrixXd ArrayToMatrix(double* arr, int length) {
 
-    MatrixXd mat = MatrixXd(len / 2, 3);
+    MatrixXd mat = MatrixXd(length / 2, 3);
 
-    for (size_t i = 0; i < len - 1; i+=2)
+    for (int i = 0; i < length/2; i++)
     {
-        mat << Vector3d(1, arr[i], arr[i + 1]);
+        mat(i, 0) = 1;
+        mat(i, 1) = arr[2*i];
+        mat(i, 2) = arr[2*i + 1];
+        std::cout << mat(i, 0) << mat(i, 1) << mat(i, 2);
     }
 
     return mat;
@@ -32,9 +38,9 @@ double* MatrixToArray(MatrixXd mat) {
     double* arr = new double[mat.size() * mat.row(0).size()];
     int cmpt = 0;
 
-    for (size_t i = 0; i < mat.size(); i++)
+    for (size_t i = 0; i < (int)mat.size(); i++)
     {
-        for (size_t t = 0; t < mat.row(i).size(); t++)
+        for (size_t t = 0; t < (int)mat.row(i).size(); t++)
         {
             arr[cmpt] = mat(i, t);
             cmpt++;
@@ -43,24 +49,6 @@ double* MatrixToArray(MatrixXd mat) {
 
     return arr;
 }
-
-//double* sliceDoubleArray(int start, int end, double* arr, int len) {
-//
-//    int cmpt = 0;
-//    double* res = new double[end - start + 1];
-//    for (size_t i = 0; i < len; i++)
-//    {
-//        if (i >= start) {
-//            res[cmpt] = arr[i];
-//            cmpt++;
-//        }
-//
-//        if (i > end) {
-//            return res;
-//        }
-//    }
-//    return NULL;
-//}
 
 extern "C" {
     /*
@@ -88,21 +76,16 @@ extern "C" {
         MatrixXd matT = mat.transpose();
         VectorXd Y(trainingSphereLength);
 
-        for (size_t i = 0; i < trainingSphereLength; i++)
+        for (int i = 0; i < trainingSphereLength; i++)
         {
-            Y << trainingExpectedOutputs[i];
+            Y(i) = trainingExpectedOutputs[i];
         }
 
-        auto W = ((matT * mat).inverse() * matT)* Y;
-        int cmpt = 0;
+        MatrixXd W = ((matT * mat).inverse() * matT) * Y;
 
-        for (size_t i = 0; i < mat.size(); i++)
+        for (int i = 0; i < W.rows(); i++)
         {
-            for (size_t t = 0; t < mat.row(i).size(); t++)
-            {
-                model[cmpt] = W(i, t);
-                cmpt++;
-            }
+            model[i] = W(i, 0);
         }
 
         return model;
@@ -117,8 +100,7 @@ extern "C" {
         double* trainingExpectedOutputs,
         double pas_apprentissage,
         double count_iteration,
-        int trainingSphereLength,
-        int count_feature
+        int trainingSphereLength
     ) {
         MatrixXd matInput = ArrayToMatrix(trainingInputs, trainingSphereLength * 2);
 
@@ -130,8 +112,7 @@ extern "C" {
             double error = pas_apprentissage * (trainingExpectedOutputs[sample] -
                 PredictClassificationModel(
                     model,
-                    XK,
-                    trainingSphereLength * 2));
+                    XK));
             
             model[0] += error;
             for (size_t t = 1; t < 3; t++)
@@ -143,22 +124,15 @@ extern "C" {
         return model;
     }
 
-    /*
-        input => [x, z];
-    */
     __declspec(dllexport) double PredictRegressionModel(double* model, double* input) {
         return model[0] + model[1] * input[0] + model[2] * input[1];
     }
 
-    /*
-        input => [x, z];
-    */
+
     __declspec(dllexport) double PredictClassificationModel(
         double *model, 
-        double *input,
-        int len_input
+        double *input
     ) {
-
         return sgn(PredictRegressionModel(model, input));
     }
 

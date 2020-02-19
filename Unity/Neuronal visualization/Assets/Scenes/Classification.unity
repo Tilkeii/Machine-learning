@@ -4547,7 +4547,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1158790806}
-        m_MethodName: PredictOnTestSpheres
+        m_MethodName: PredictClassification
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -11267,10 +11267,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e94cf601d57f5347aa9c0b628a35ccb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spheres:
-  - {fileID: 988659570}
-  - {fileID: 802579156}
-  - {fileID: 211007334}
 --- !u!4 &1219944623
 Transform:
   m_ObjectHideFlags: 0
@@ -17844,7 +17840,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1158790806}
-        m_MethodName: Train
+        m_MethodName: TrainClassificationModel
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
