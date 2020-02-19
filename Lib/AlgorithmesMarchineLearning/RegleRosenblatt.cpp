@@ -111,59 +111,58 @@ extern "C" {
     /**
         Rosenblatt
     */
-    __declspec(dllexport) int TrainClassificationModel(
-        double *model, double trainingInputs[],
-        int count_feature, int trainingSphereLength,
-        double trainingExpectedOutputs[],
-        int biais,
-        float pas_apprentissage,
-        int count_iteration
+    __declspec(dllexport) double* TrainClassificationModel(
+        double* model, 
+        double* trainingInputs,
+        double* trainingExpectedOutputs,
+        double pas_apprentissage,
+        double count_iteration,
+        double old_weight,
+        int trainingSphereLength
     ) {
-        return 0;
+
+        double new_weight = old_weight;
+        MatrixXd matInput = ArrayToMatrix(trainingInputs, trainingSphereLength * 2);
+
+        for (size_t i = 0; i < count_iteration; i++)
+        {
+            for (size_t t = 0; t < trainingSphereLength; t++)
+            {
+
+            }
+
+            int sample = rand() % trainingSphereLength;
+            /* trainingInputs + sample * 2 => on decalle par rapport a l'adresse */
+            /*new_weight = new_weight + pas_apprentissage * (trainingExpectedOutputs[sample] -
+                PredictClassificationModel(model, trainingInputs + sample * 2, trainingSphereLength * 2)) * matInput.row(sample);*/
+            /*new_weight = new_weight + pas_apprentissage * (trainingExpectedOutputs[sample] -
+                PredictClassificationModel(
+                    model,
+                    sliceDoubleArray(sample * 2, sample * 2 + 1, trainingInputs, trainingSphereLength * 2),
+                    trainingSphereLength * 2)) *
+                matInput.row(sample);*/
+        }
+
+        return model;
     }
 
-    /**
-        count_input : total input
+    /*
+        input => [x, z];
     */
-    __declspec(dllexport) double PredictRegressionModel(double* model, double* input/*, int len_input, int count_feature*/) {
-
-        //double *resultat = new double[len_input / 2];
-        //int cmpt = 0;
-
-        //for (size_t i = 0; i < len_input - 1; i+=2)
-        //{
-        //    resultat[cmpt] = model[0] + model[1] * input[i] + model[2] * input[i + 1];
-        //    cmpt++;
-        //}
-        //return resultat;
-
+    __declspec(dllexport) double PredictRegressionModel(double* model, double* input) {
         return model[0] + model[1] * input[0] + model[2] * input[1];
     }
 
-    __declspec(dllexport) double* PredictClassificationModel(
+    /*
+        input => [x, z];
+    */
+    __declspec(dllexport) double PredictClassificationModel(
         double *model, 
         double *input,
-        int len_input,
-        int count_feature
+        int len_input
     ) {
-        double* resultat = new double[len_input];
-        
-        /*double* regression = PredictRegressionModel(model, input, len_input, count_feature);
-        for (size_t i = 0; i < len_input / 2; i++)
-        {
-            resultat[i] = sgn(regression[i]);
-        }*/
 
-        int cmpt = 0;
-        for (size_t i = 0; i < len_input - 1; i+=2)
-        {
-            double* slicedArr = sliceDoubleArray(i, i + 1, input, len_input);
-            double regression = PredictRegressionModel(model, slicedArr/*, len_input, count_feature*/);
-            resultat[cmpt] = sgn(regression);
-            cmpt++;
-        }
-
-        return resultat;
+        return sgn(PredictRegressionModel(model, input));
     }
 
     __declspec(dllexport) int FreeLinearModel(double *model) {
