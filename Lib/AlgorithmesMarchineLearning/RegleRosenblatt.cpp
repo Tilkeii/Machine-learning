@@ -117,30 +117,37 @@ extern "C" {
         double* trainingExpectedOutputs,
         double pas_apprentissage,
         double count_iteration,
-        double old_weight,
-        int trainingSphereLength
+        int trainingSphereLength,
+        int count_feature
     ) {
-
-        double new_weight = old_weight;
         MatrixXd matInput = ArrayToMatrix(trainingInputs, trainingSphereLength * 2);
 
         for (size_t i = 0; i < count_iteration; i++)
-        {
+        {   
             for (size_t t = 0; t < trainingSphereLength; t++)
             {
+                int sample = rand() % trainingSphereLength;
+                /*model = model + pas_apprentissage * (trainingExpectedOutputs[sample] -
+                    PredictClassificationModel(
+                        model,
+                        sliceDoubleArray(sample * 2, sample * 2 + 1, trainingInputs, trainingSphereLength * 2),
+                        trainingSphereLength * 2)) *
+                    matInput.row(sample);*/
+                //MatrixXd modelMat = ArrayToMatrix(model, 3);
+                double* X = sliceDoubleArray(sample * 2, sample * 2 + 1, trainingInputs, trainingSphereLength * 2);
+                double test = pas_apprentissage * (trainingExpectedOutputs[sample] -
+                    PredictClassificationModel(
+                        model,
+                        X,
+                        trainingSphereLength * 2));
+                // 
 
+                // Additionner ancien model avec
             }
 
-            int sample = rand() % trainingSphereLength;
             /* trainingInputs + sample * 2 => on decalle par rapport a l'adresse */
             /*new_weight = new_weight + pas_apprentissage * (trainingExpectedOutputs[sample] -
                 PredictClassificationModel(model, trainingInputs + sample * 2, trainingSphereLength * 2)) * matInput.row(sample);*/
-            /*new_weight = new_weight + pas_apprentissage * (trainingExpectedOutputs[sample] -
-                PredictClassificationModel(
-                    model,
-                    sliceDoubleArray(sample * 2, sample * 2 + 1, trainingInputs, trainingSphereLength * 2),
-                    trainingSphereLength * 2)) *
-                matInput.row(sample);*/
         }
 
         return model;
