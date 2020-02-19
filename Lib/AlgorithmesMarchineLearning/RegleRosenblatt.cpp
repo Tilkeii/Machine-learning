@@ -108,6 +108,9 @@ extern "C" {
         return model;
     }
 
+    /**
+        Rosenblatt
+    */
     __declspec(dllexport) int TrainClassificationModel(
         double *model, double trainingInputs[],
         int count_feature, int trainingSphereLength,
