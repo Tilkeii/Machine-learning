@@ -142,7 +142,7 @@ public class RetrieveAndModifySpherePositionsScript : MonoBehaviour
         Debug.Log($"/****************************/");
     }
 
-    public void PredictOnTestSpheres()
+    public void PredictRegression()
     {
         for (var i = 0; i < testSpheres.Length; i++)
         {
