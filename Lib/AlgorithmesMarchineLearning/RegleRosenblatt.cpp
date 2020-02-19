@@ -124,30 +124,20 @@ extern "C" {
 
         for (size_t i = 0; i < count_iteration; i++)
         {   
-            for (size_t t = 0; t < trainingSphereLength; t++)
+            int sample = rand() % trainingSphereLength;
+
+            double* XK = trainingInputs + sample * 2;
+            double error = pas_apprentissage * (trainingExpectedOutputs[sample] -
+                PredictClassificationModel(
+                    model,
+                    XK,
+                    trainingSphereLength * 2));
+            
+            model[0] += error;
+            for (size_t t = 1; t < 3; t++)
             {
-                int sample = rand() % trainingSphereLength;
-                /*model = model + pas_apprentissage * (trainingExpectedOutputs[sample] -
-                    PredictClassificationModel(
-                        model,
-                        sliceDoubleArray(sample * 2, sample * 2 + 1, trainingInputs, trainingSphereLength * 2),
-                        trainingSphereLength * 2)) *
-                    matInput.row(sample);*/
-                //MatrixXd modelMat = ArrayToMatrix(model, 3);
-                double* X = sliceDoubleArray(sample * 2, sample * 2 + 1, trainingInputs, trainingSphereLength * 2);
-                double test = pas_apprentissage * (trainingExpectedOutputs[sample] -
-                    PredictClassificationModel(
-                        model,
-                        X,
-                        trainingSphereLength * 2));
-                // 
-
-                // Additionner ancien model avec
+                model[t] += XK[t] * error;
             }
-
-            /* trainingInputs + sample * 2 => on decalle par rapport a l'adresse */
-            /*new_weight = new_weight + pas_apprentissage * (trainingExpectedOutputs[sample] -
-                PredictClassificationModel(model, trainingInputs + sample * 2, trainingSphereLength * 2)) * matInput.row(sample);*/
         }
 
         return model;
