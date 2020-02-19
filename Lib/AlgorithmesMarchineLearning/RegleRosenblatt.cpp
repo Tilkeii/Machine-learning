@@ -27,24 +27,6 @@ MatrixXd ArrayToMatrix(double* arr, int len) {
     return mat;
 }
 
-double* sliceDoubleArray(int start, int end, double* arr, int len) {
-
-    int cmpt = 0;
-    double* res = new double[end - start + 1];
-    for (size_t i = 0; i < len; i++)
-    {
-        if (i >= start) {
-            res[cmpt] = arr[i];
-            cmpt++;
-        }
-
-        if (i > end) {
-            return res;
-        }
-    }
-    return NULL;
-}
-
 double* MatrixToArray(MatrixXd mat) {
 
     double* arr = new double[mat.size() * mat.row(0).size()];
@@ -61,6 +43,24 @@ double* MatrixToArray(MatrixXd mat) {
 
     return arr;
 }
+
+//double* sliceDoubleArray(int start, int end, double* arr, int len) {
+//
+//    int cmpt = 0;
+//    double* res = new double[end - start + 1];
+//    for (size_t i = 0; i < len; i++)
+//    {
+//        if (i >= start) {
+//            res[cmpt] = arr[i];
+//            cmpt++;
+//        }
+//
+//        if (i > end) {
+//            return res;
+//        }
+//    }
+//    return NULL;
+//}
 
 extern "C" {
     /*
