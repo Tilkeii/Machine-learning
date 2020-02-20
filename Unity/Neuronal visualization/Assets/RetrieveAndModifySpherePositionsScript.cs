@@ -29,14 +29,16 @@ public class RetrieveAndModifySpherePositionsScript : MonoBehaviour
     [DllImport("AlgorithmesMarchineLearning")]
     private static extern double PredictRegressionModel(
         IntPtr model,
-        double[] input);
+        double[] input,
+        int count_feature);
 
     [DllImport("AlgorithmesMarchineLearning")]
     private static extern IntPtr TrainRegressionModel(
         IntPtr model,
         double[] trainingInputs,
+        double[] trainingExpectedOutputs,
         int trainingSphereLength,
-        double[] trainingExpectedOutputs);
+        int count_feature);
 
     [DllImport("AlgorithmesMarchineLearning")]
     private static extern IntPtr TrainClassificationModel(
@@ -45,12 +47,14 @@ public class RetrieveAndModifySpherePositionsScript : MonoBehaviour
         double[] trainingExpectedOutputs,
         double pas_apprentissage,
         int count_iteration,
-        int trainingSphereLength);
+        int trainingSphereLength,
+        int count_feature);
 
     [DllImport("AlgorithmesMarchineLearning")]
     private static extern double PredictClassificationModel(
         IntPtr model,
-        double[] input
+        double[] input,
+        int count_feature
     );
 
 
@@ -116,7 +120,7 @@ public class RetrieveAndModifySpherePositionsScript : MonoBehaviour
             trainingExpectedOutputs[i] = trainingSpheres[i].position.y;
         }
 
-        TrainRegressionModel(modelPtr, trainingInputs, trainingSpheres.Length, trainingExpectedOutputs);
+        TrainRegressionModel(modelPtr, trainingInputs, trainingExpectedOutputs, trainingSpheres.Length, 2);
 
         Debug.Log($"/****************************/");
     }
@@ -137,7 +141,7 @@ public class RetrieveAndModifySpherePositionsScript : MonoBehaviour
             trainingExpectedOutputs[i] = trainingSpheres[i].position.y;
         }
 
-        TrainClassificationModel(modelPtr, trainingInputs, trainingExpectedOutputs, 0.01, 10000, trainingSpheres.Length);
+        TrainClassificationModel(modelPtr, trainingInputs, trainingExpectedOutputs, 0.01, 10000, trainingSpheres.Length, 2);
 
         Debug.Log($"/****************************/");
     }
@@ -149,7 +153,7 @@ public class RetrieveAndModifySpherePositionsScript : MonoBehaviour
             var input = new double[] {testSpheres[i].position.x, testSpheres[i].position.z};
 
             //var predictedY = PredictXXXLinearModel(model, input, 2)
-            double predictedY = PredictRegressionModel(modelPtr, input);
+            double predictedY = PredictRegressionModel(modelPtr, input, 2);
 
             //var predictedY = Random.Range(-5, 5);
             testSpheres[i].position = new Vector3(
@@ -166,7 +170,7 @@ public class RetrieveAndModifySpherePositionsScript : MonoBehaviour
             var input = new double[] { testSpheres[i].position.x, testSpheres[i].position.z };
 
             //var predictedY = PredictXXXLinearModel(model, input, 2)
-            double predictedY = PredictClassificationModel(modelPtr, input);
+            double predictedY = PredictClassificationModel(modelPtr, input, 2);
 
             //var predictedY = Random.Range(-5, 5);
             testSpheres[i].position = new Vector3(

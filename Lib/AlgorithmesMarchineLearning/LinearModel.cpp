@@ -17,16 +17,21 @@ template <typename T> int sgn(T val) {
 	1 2 4
 	1 1 3
 */
-MatrixXd ArrayToMatrix(double* arr, int length) {
+MatrixXd ArrayToMatrix(double* arr, int length, int count_feature) {
 
-	MatrixXd mat = MatrixXd(length / 2, 3);
+	MatrixXd mat = MatrixXd(length, count_feature + 1);
 
-	for (int i = 0; i < length / 2; i++)
+	for (int i = 0; i < length; i++)
 	{
 		mat(i, 0) = 1;
+		for (int j = 1; j < count_feature + 1; j++)
+		{
+			mat(i, j) = arr[count_feature * i + (j - 1)];
+		}
+		/*mat(i, 0) = 1;
 		mat(i, 1) = arr[2 * i];
-		mat(i, 2) = arr[2 * i + 1];
-		std::cout << mat(i, 0) << mat(i, 1) << mat(i, 2);
+		mat(i, 2) = arr[2 * i + 1];*/
+		//std::cout << mat(i, 0) << mat(i, 1) << mat(i, 2);
 	}
 
 	return mat;
@@ -67,10 +72,11 @@ double* CreateLinearModel(int count_feature) {
 double* TrainRegressionModel(
 	double* model,
 	double* trainingInputs,
+	double* trainingExpectedOutputs,
 	int trainingSphereLength,
-	double* trainingExpectedOutputs
+	int count_feature
 ) {
-	MatrixXd mat = ArrayToMatrix(trainingInputs, trainingSphereLength * 2);
+	MatrixXd mat = ArrayToMatrix(trainingInputs, trainingSphereLength, count_feature);
 	MatrixXd matT = mat.transpose();
 	VectorXd Y(trainingSphereLength);
 
@@ -98,21 +104,23 @@ double* TrainClassificationModel(
 	double* trainingExpectedOutputs,
 	double pas_apprentissage,
 	int count_iteration,
-	int trainingSphereLength
+	int trainingSphereLength,
+	int count_feature
 ) {
 	for (int i = 0; i < count_iteration; i++)
 	{
 		int sample = rand() % trainingSphereLength;
 
-		double* XK = trainingInputs + sample * 2;
+		double* XK = trainingInputs + sample * count_feature;
 		double error = pas_apprentissage * (trainingExpectedOutputs[sample] -
 			PredictClassificationModel(
 				model,
-				XK));
+				XK,
+				count_feature));
 
 		if (error != 0) {
 			model[0] += error;
-			for (int t = 1; t < 3; t++)
+			for (int t = 1; t < count_feature + 1; t++)
 			{
 				model[t] += XK[t - 1] * error;
 			}
@@ -122,16 +130,26 @@ double* TrainClassificationModel(
 	return model;
 }
 
-double PredictRegressionModel(double* model, double* input) {
-	return model[0] + model[1] * input[0] + model[2] * input[1];
+double PredictRegressionModel(
+	double* model,
+	double* input,
+	int count_feature
+) {
+	double res = model[0];
+	for (int i = 1; i < count_feature + 1; i++)
+	{
+		res += model[i] * input[i - 1];
+	}
+	return res;
 }
 
 
 double PredictClassificationModel(
 	double* model,
-	double* input
+	double* input,
+	int count_feature
 ) {
-	auto rslt = PredictRegressionModel(model, input);
+	auto rslt = PredictRegressionModel(model, input, count_feature);
 
 	return rslt < 0 ? -1.0 : 1.0;
 }

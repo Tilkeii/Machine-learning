@@ -13,8 +13,9 @@ extern "C" {
     __declspec(dllexport) double* TrainRegressionModel(
         double* model,
         double* trainingInputs,
+        double* trainingExpectedOutputs,
         int trainingSphereLength,
-        double* trainingExpectedOutputs
+        int count_feature
     );
     __declspec(dllexport) double* TrainClassificationModel(
         double* model,
@@ -22,12 +23,18 @@ extern "C" {
         double* trainingExpectedOutputs,
         double pas_apprentissage,
         int count_iteration,
-        int trainingSphereLength
+        int trainingSphereLength,
+        int count_feature
     );
-    __declspec(dllexport) double PredictRegressionModel(double* model, double* input);
-    __declspec(dllexport) int FreeLinearModel(double* model);
+    __declspec(dllexport) double PredictRegressionModel(
+        double* model,
+        double* input,
+        int count_feature
+    );
     __declspec(dllexport) double PredictClassificationModel(
         double* model,
-        double* input
+        double* input,
+        int count_feature
     );
+    __declspec(dllexport) int FreeLinearModel(double* model);
 }
