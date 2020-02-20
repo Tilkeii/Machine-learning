@@ -56,7 +56,7 @@ double* CreateLinearModel(int count_feature) {
 	double* weight = new double[count_feature + 1];
 
 
-	for (size_t i = 0; i < count_feature + 1; i++)
+	for (int i = 0; i < count_feature + 1; i++)
 	{
 		weight[i] = (2 * ((double)rand() / (double)RAND_MAX) - 1);
 	}
@@ -97,12 +97,10 @@ double* TrainClassificationModel(
 	double* trainingInputs,
 	double* trainingExpectedOutputs,
 	double pas_apprentissage,
-	double count_iteration,
+	int count_iteration,
 	int trainingSphereLength
 ) {
-	MatrixXd matInput = ArrayToMatrix(trainingInputs, trainingSphereLength * 2);
-
-	for (size_t i = 0; i < count_iteration; i++)
+	for (int i = 0; i < count_iteration; i++)
 	{
 		int sample = rand() % trainingSphereLength;
 
@@ -112,10 +110,12 @@ double* TrainClassificationModel(
 				model,
 				XK));
 
-		model[0] += error;
-		for (size_t t = 1; t < 3; t++)
-		{
-			model[t] += XK[t] * error;
+		if (error != 0) {
+			model[0] += error;
+			for (int t = 1; t < 3; t++)
+			{
+				model[t] += XK[t - 1] * error;
+			}
 		}
 	}
 
@@ -131,7 +131,9 @@ double PredictClassificationModel(
 	double* model,
 	double* input
 ) {
-	return sgn(PredictRegressionModel(model, input));
+	auto rslt = PredictRegressionModel(model, input);
+
+	return rslt < 0 ? -1.0 : 1.0;
 }
 
 int FreeLinearModel(double* model) {

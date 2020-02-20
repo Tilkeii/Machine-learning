@@ -21,7 +21,7 @@ extern "C" {
         double* trainingInputs,
         double* trainingExpectedOutputs,
         double pas_apprentissage,
-        double count_iteration,
+        int count_iteration,
         int trainingSphereLength
     );
     __declspec(dllexport) double PredictRegressionModel(double* model, double* input);

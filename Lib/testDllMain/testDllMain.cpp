@@ -15,9 +15,10 @@ int main()
     
     double trainingInputs[] = { 0, 1, 2, 3, 4, 5 };
     int trainingSphereLength = 3;
-    double trainingExpectedOutput[] = {0, 1, 2, 3, 4, 5};
-    model = TrainRegressionModel(model, trainingInputs, trainingSphereLength, trainingExpectedOutput);
-    
+    double trainingExpectedOutput[] = {1, 1, -1};
+    //model = TrainRegressionModel(model, trainingInputs, trainingSphereLength, trainingExpectedOutput);
+    model = TrainClassificationModel(model, trainingInputs, trainingExpectedOutput, 0.01, 1000, trainingSphereLength);
+
     std::cout << "model : " << model;
 }
 

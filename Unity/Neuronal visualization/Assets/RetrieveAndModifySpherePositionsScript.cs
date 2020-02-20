@@ -44,7 +44,7 @@ public class RetrieveAndModifySpherePositionsScript : MonoBehaviour
         double[] trainingInputs,
         double[] trainingExpectedOutputs,
         double pas_apprentissage,
-        double count_iteration,
+        int count_iteration,
         int trainingSphereLength);
 
     [DllImport("AlgorithmesMarchineLearning")]
@@ -116,7 +116,7 @@ public class RetrieveAndModifySpherePositionsScript : MonoBehaviour
             trainingExpectedOutputs[i] = trainingSpheres[i].position.y;
         }
 
-        modelPtr = TrainRegressionModel(modelPtr, trainingInputs, trainingSpheres.Length, trainingExpectedOutputs);
+        TrainRegressionModel(modelPtr, trainingInputs, trainingSpheres.Length, trainingExpectedOutputs);
 
         Debug.Log($"/****************************/");
     }
@@ -137,7 +137,7 @@ public class RetrieveAndModifySpherePositionsScript : MonoBehaviour
             trainingExpectedOutputs[i] = trainingSpheres[i].position.y;
         }
 
-        modelPtr = TrainClassificationModel(modelPtr, trainingInputs, trainingExpectedOutputs, 0.01, 1000, trainingSpheres.Length);
+        TrainClassificationModel(modelPtr, trainingInputs, trainingExpectedOutputs, 0.01, 10000, trainingSpheres.Length);
 
         Debug.Log($"/****************************/");
     }
