@@ -28,10 +28,6 @@ MatrixXd ArrayToMatrix(double* arr, int length, int count_feature) {
 		{
 			mat(i, j) = arr[count_feature * i + (j - 1)];
 		}
-		/*mat(i, 0) = 1;
-		mat(i, 1) = arr[2 * i];
-		mat(i, 2) = arr[2 * i + 1];*/
-		//std::cout << mat(i, 0) << mat(i, 1) << mat(i, 2);
 	}
 
 	return mat;
