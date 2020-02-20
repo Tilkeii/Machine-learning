@@ -3,23 +3,44 @@
 
 #include <iostream>
 #include "../AlgorithmesMarchineLearning/LinearModel.h"
+#include "../AlgorithmesMarchineLearning/Multilayer.h"
 
 int main()
 {
-    double* model;
-    model = CreateLinearModel(2);
+    // LINEAR
+    //double* model;
+    //model = CreateLinearModel(2);
+    //for (int i = 0; i < 3; i++)
+    //{
+    //    std::cout << model[i];
+    //}
+    //
+    //double trainingInputs[] = { 0, 1, 2, 3, 4, 5 };
+    //int trainingSphereLength = 3;
+    //double trainingExpectedOutput[] = {1, 1, -1};
+    ////model = TrainRegressionModel(model, trainingInputs, trainingSphereLength, trainingExpectedOutput);
+    //model = TrainClassificationModel(model, trainingInputs, trainingExpectedOutput, 0.01, 1000, trainingSphereLength);
+
+    //std::cout << "model : " << model;
+
+    // PCM
+
+    int count_model[] = {3, 3, 1};
+    double*** network = CreateMultiLayerModel(3, count_model, 3, 2);
+
     for (int i = 0; i < 3; i++)
     {
-        std::cout << model[i];
+        for (int j = 0; j < count_model[i]; j++)
+        {
+            std::cout
+                << "Layer " << i
+                << " ; Neuronne " << j
+                << " ; w1 " << network[i][j][0]
+                << " ; w2 " << network[i][j][1]
+                << " ; w3 " << network[i][j][2]
+                << "\n";
+        }
     }
-    
-    double trainingInputs[] = { 0, 1, 2, 3, 4, 5 };
-    int trainingSphereLength = 3;
-    double trainingExpectedOutput[] = {1, 1, -1};
-    //model = TrainRegressionModel(model, trainingInputs, trainingSphereLength, trainingExpectedOutput);
-    model = TrainClassificationModel(model, trainingInputs, trainingExpectedOutput, 0.01, 1000, trainingSphereLength);
-
-    std::cout << "model : " << model;
 }
 
 // Exécuter le programme : Ctrl+F5 ou menu Déboguer > Exécuter sans débogage
