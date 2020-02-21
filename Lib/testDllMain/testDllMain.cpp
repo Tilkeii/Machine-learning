@@ -25,8 +25,9 @@ int main()
 
     // PCM
 
+    double trainingInputs[] = { 0, 1, 2, 3, 4, 5 };
     int count_neurone[] = {3, 3, 1};
-    double*** network = CreateMultiLayerModel(3, count_neurone, 2);
+    double** network = CreateMultiLayerModel(3, count_neurone, 2, trainingInputs);
 
     for (int layer = 0; layer < 3; layer++)
     {
@@ -35,9 +36,7 @@ int main()
             std::cout
                 << "Layer " << layer
                 << " ; Neurone " << neurone
-                << " ; w1 " << network[layer][neurone][0]
-                << " ; w2 " << network[layer][neurone][1]
-                << " ; w3 " << network[layer][neurone][2]
+                << " ; value " << network[layer][neurone]
                 << "\n";
         }
     }
