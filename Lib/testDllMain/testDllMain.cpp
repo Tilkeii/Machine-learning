@@ -25,20 +25,25 @@ int main()
 
     // PCM
 
-    int count_neurone[] = {3, 3, 1};
-    double*** network = CreateMultiLayerModel(3, count_neurone, 2);
+    int count_neurone[] = {3, 4, 2};
+    int count_feature = 2;
+    int count_layer = 3;
+    double*** network = CreateMultiLayerModel(count_layer, count_neurone, count_feature);
 
-    for (int layer = 0; layer < 3; layer++)
+    for (int layer = 0; layer < count_layer; layer++)
     {
         for (int neurone = 0; neurone < count_neurone[layer]; neurone++)
         {
             std::cout
                 << "Layer " << layer
                 << " ; Neurone " << neurone
-                << " ; w1 " << network[layer][neurone][0]
-                << " ; w2 " << network[layer][neurone][1]
-                << " ; w3 " << network[layer][neurone][2]
-                << "\n";
+                << " ; ";
+            int n = layer == 0 ? count_feature + 1 : count_neurone[layer];
+            for (int weight = 0; weight < n; weight++)
+            {
+                std::cout << " w" << weight << " : " << network[layer][neurone][weight];
+            }
+            std::cout << "\n";
         }
     }
 }

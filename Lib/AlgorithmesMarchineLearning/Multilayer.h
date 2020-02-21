@@ -21,6 +21,7 @@ extern "C" {
         double*** network,
         int countlayers,
         int* count_neurones,
-        int count_weights
+        int count_weights,
+        double* inputs
     );
 }

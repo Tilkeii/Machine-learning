@@ -9,13 +9,22 @@ double*** CreateMultiLayerModel(
 	// Initialisation mémoire du network
 	double*** network = new double** [count_layer];
 
-	for (int layer = 0; layer < count_layer; layer++) // Layers
+	// Creation input layer
+	network[0] = new double* [count_neurones[0]];
+	for (int input_neurone = 0; input_neurone < count_feature + 1; input_neurone++)
+	{
+		network[0][input_neurone] = new double [count_feature];
+		network[0][input_neurone] = CreateLinearModel(count_feature);
+	}
+
+	// Creation hidden layer
+	for (int layer = 1; layer < count_layer; layer++) // Layers
 	{
 		network[layer] = new double* [count_neurones[layer]]; // Initialisation mémoire de la couche "i"
 		for (int neurone = 0; neurone < count_neurones[layer]; neurone++) // Models = neuronnes
 		{
-			network[layer][neurone] = new double[count_feature + 1]; // Initialisation mémoire du model "i, j" 
-			double* weights = CreateLinearModel(count_feature); // Creation d'un model w1, w2, w3
+			network[layer][neurone] = new double[count_neurones[layer - 1]]; // Initialisation mémoire du model "i, j" 
+			double* weights = CreateLinearModel(count_neurones[layer - 1]); // Creation d'un model w1, w2, w3
 			network[layer][neurone] = weights; // Attribution du model
 		}
 	}
@@ -43,24 +52,11 @@ double PredictMultiLayerClassificationModel(
 	double*** network,
 	int countlayers,
 	int* count_neurones,
-	int count_weights)
+	int count_weights,
+	double* inputs)
 {
-	for (int layer = 1; layer < countlayers; layer++)
-	{
-		for (int neurone = 0; neurone < count_neurones[layer]; neurone++)
-		{
-			double res;
-
-			for (int prev_layer_neurone = 0; prev_layer_neurone < count_neurones[layer - 1]; prev_layer_neurone++)
-			{
 
 
-			}
-
-			//tanh
-
-		}
-	}
 
 	return NULL;
 }
