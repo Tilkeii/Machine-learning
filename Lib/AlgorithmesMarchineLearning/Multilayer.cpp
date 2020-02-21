@@ -1,26 +1,26 @@
 #include "pch.h"
 #include "Multilayer.h"
 
-double** CreateMultiLayerModel(
+double*** CreateMultiLayerModel(
 	int count_layer,
 	int* count_neurones, 
-	int count_feature,
-	double* inputs)
+	int count_feature)
 {
 	// Initialisation mémoire du network
-	double** network = new double* [count_layer];
+	double*** layers = new double** [count_layer];
 
 	for (int layer = 0; layer < count_layer; layer++) // Layers
 	{
-		network[layer] = new double [count_neurones[layer]]; // Initialisation mémoire de la couche "i"
+		layers[layer] = new double* [count_neurones[layer]]; // Initialisation mémoire de la couche "i"
 		for (int neurone = 0; neurone < count_neurones[layer]; neurone++) // Models = neuronnes
 		{
+			layers[layer][neurone] = new double[count_feature + 1]; // Initialisation mémoire du model "i, j" 
 			double* weights = CreateLinearModel(count_feature); // Creation d'un model w1, w2, w3
-			network[layer][neurone] = PredictClassificationModel(weights, inputs, count_feature); // Valeur du neurone
+			layers[layer][neurone] = weights; // Attribution du model
 		}
 	}
 
-	return network;
+	return layers;
 }
 
 void TrainMultiLayerRegressionModel()
@@ -52,7 +52,7 @@ double PredictMultiLayerRegressionModel(
 }
 
 double PredictMultiLayerClassificationModel(
-	double** network,
+	double*** network,
 	int countlayers,
 	int* count_neurones,
 	int count_weights)
@@ -66,8 +66,6 @@ double PredictMultiLayerClassificationModel(
 			for (int prev_layer_neurone = 0; prev_layer_neurone < count_neurones[layer - 1]; prev_layer_neurone++)
 			{
 
-				//double* model = network[layer][prev_layer_neurone];
-				//PredictClassificationModel(model, );
 
 			}
 

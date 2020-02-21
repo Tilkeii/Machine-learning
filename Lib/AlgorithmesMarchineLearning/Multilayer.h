@@ -5,11 +5,10 @@
 #include "LinearModel.h"
 
 extern "C" {
-    __declspec(dllexport) double** CreateMultiLayerModel(
+    __declspec(dllexport) double*** CreateMultiLayerModel(
         int count_layer,
         int* count_neurones,
-        int count_feature,
-        double* inputs
+        int count_feature
     );
     __declspec(dllexport) void TrainMultiLayerRegressionModel();
     __declspec(dllexport) void TrainMultiLayerClassificationModel();
@@ -19,7 +18,7 @@ extern "C" {
         int count_weights
     );
     __declspec(dllexport) double PredictMultiLayerClassificationModel(
-        double** network,
+        double*** network,
         int countlayers,
         int* count_neurones,
         int count_weights
