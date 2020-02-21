@@ -36,18 +36,6 @@ double PredictMultiLayerRegressionModel(
 	int* count_neurones,
 	int count_weights)
 {
-
-	for (int layer = 1; layer < countlayers; layer++)
-	{
-		for (int neurone = 0; neurone < count_neurones[layer]; neurone++)
-		{
-			for (int weight = 0; weight < count_weights; weight++)
-			{
-
-			}
-		}
-	}
-
 	return NULL;
 }
 
@@ -73,8 +61,6 @@ double PredictMultiLayerClassificationModel(
 
 		}
 	}
-
-	return NULL;
 
 	return NULL;
 }
